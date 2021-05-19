@@ -17,7 +17,9 @@
 
     // Simulates the service called to return a JWT
     function getJWT() {
-      return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJscF9zZGVzIjpbeyJ0eXBlIjoiY3RtcmluZm8iLCJpbmZvIjp7ImNzdGF0dXMiOiJjYW5jZWxsZWQiLCJjdHlwZSI6IkFCQzE0OTgiLCJjb21wYW55QnJhbmNoIjoiQSIsImN1c3RvbWVySWQiOiIxMzg3NjZBQyJ9fV0sInN1YiI6Iis5NzItMy01NTU1LTU1NiIsImlzcyI6Imh0dHBzOi8vaWRwLmxpdmVwZXJzb24ubmV0IiwiYWNyIjoibG9hMSIsImV4cCI6MTYyMTQ0OTMwMCwiaWF0IjoxNTcyNTIxMjYxfQ.FPpVdcWSiUTj2v7evOTVbg4-RSqJFp21-ivrVOoYNy0R5DaFiE-PuiGJ5th6uQb6xiAPU33sY3H3PVgXrA7slBu0tqa6umhS8orPUaWUx8AH0JlRHiBJLRw2eSvHnZI5NAKEcj3UjNdLh5m8u8D5QscqJG_fe6nBumbmVKQ3tYsiu4GDf2N1MxH6nweLS4umjDlBUF9xysdjNqVnUuWw8U8gPg2aBHFddJgJ_V4MRKe95aWyXBiVXBf0PUSk5DNuMevL5RkDVPP3AzSFDJ2nA8YA8iqR_VeatOcFQrnIzwS6W86jdkJFNHcrxQLPaVvxmfuh22L1D9C7mOaWRB_9vA";
+      var jwt = document.getElementById("jwt").value;
+      return jwt;
+      // return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJscF9zZGVzIjpbeyJ0eXBlIjoiY3RtcmluZm8iLCJpbmZvIjp7ImNzdGF0dXMiOiJjYW5jZWxsZWQiLCJjdHlwZSI6IkFCQzE0OTgiLCJjb21wYW55QnJhbmNoIjoiQSIsImN1c3RvbWVySWQiOiIxMzg3NjZBQyJ9fV0sInN1YiI6Iis5NzItMy01NTU1LTU1NiIsImlzcyI6Imh0dHBzOi8vaWRwLmxpdmVwZXJzb24ubmV0IiwiYWNyIjoibG9hMSIsImV4cCI6MTYyMTQ0OTMwMCwiaWF0IjoxNTcyNTIxMjYxfQ.FPpVdcWSiUTj2v7evOTVbg4-RSqJFp21-ivrVOoYNy0R5DaFiE-PuiGJ5th6uQb6xiAPU33sY3H3PVgXrA7slBu0tqa6umhS8orPUaWUx8AH0JlRHiBJLRw2eSvHnZI5NAKEcj3UjNdLh5m8u8D5QscqJG_fe6nBumbmVKQ3tYsiu4GDf2N1MxH6nweLS4umjDlBUF9xysdjNqVnUuWw8U8gPg2aBHFddJgJ_V4MRKe95aWyXBiVXBf0PUSk5DNuMevL5RkDVPP3AzSFDJ2nA8YA8iqR_VeatOcFQrnIzwS6W86jdkJFNHcrxQLPaVvxmfuh22L1D9C7mOaWRB_9vA";
     }
 
     function authenticate() {
@@ -59,7 +61,7 @@
   <div id="notAuth" style="display:none">
     Sorry, you are no longer authenticated. Please log back into eBanking.
   </div>
-  click for authentication: 
+  Enter JWT for authentication: <input id="jwt" type="text">
   <button id="authButton" style="font-size: 15px;" onclick="authenticate()">Login!</button>
 
 </body>
