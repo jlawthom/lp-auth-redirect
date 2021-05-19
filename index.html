@@ -54,8 +54,8 @@
       }
     }
 
-    function printCookie() {
-      console.log(document.cookie);
+    function printReferrer() {
+      console.log(document.referrer);
     }
   </script>
 
@@ -67,7 +67,7 @@
   </div>
   Enter JWT for authentication: <input id="jwt" type="text">
   <button id="authButton" style="font-size: 15px;" onclick="authenticate()">Login!</button>
-  <button id="cookie" style="font-size: 15px;" onclick="printCookie()">Print Cookie!</button>
+  <button id="cookie" style="font-size: 15px;" onclick="printReferrer()">Print Cookie!</button>
 
 </body>
 
