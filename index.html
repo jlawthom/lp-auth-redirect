@@ -1,67 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title></title>
+
   <script>
-    function getURLParams(search) {
-      var queryParams = {}, queryArray, singleQuery;
-      queryArray = search.substr(1).split("&");
-      for (var i = 0; i < queryArray.length; i++) {
-        if (queryArray[i].indexOf("=") > -0) {
-          singleQuery = queryArray[i].split("=");
-          if (singleQuery.length == 2) {
-            queryParams[decodeURIComponent(singleQuery[0])] = decodeURIComponent(singleQuery[1]);
-          }
-        }
+    // Example function that gets value of a specified querystring parameter
+    function getURLParam(name) {
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+      if (results == null) {
+        return null;
+      } else {
+        return results[1] || 0;
       }
-      return queryParams;
     }
-    function _getAccountIdFromUnifiedConfig(params) {
-      var state = params.state;
-      var redirectURI = params.redirect_uri;
-      if (state) {
-        state = JSON.parse(state);
-        if (state.lpUnifiedWindowConfig) {
-          return state.lpUnifiedWindowConfig.accountId;
-        }
-      }
-      else if (redirectURI) {
-        redirectURI = decodeURIComponent(redirectURI);
-        var search = redirectURI.split('?');
-        if (search.length > 0) {
-          var urlParams = getURLParams('?' + search[1]);
-          if (urlParams.lpUnifiedWindowConfig) {
-            var conf = JSON.parse(urlParams.lpUnifiedWindowConfig);
-            return (conf && conf.accountId) || '';
-          }
-        }
-      }
-      return '';
+
+    // Simulates the service called to return a JWT
+    function getJWT() {
+      return "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJscF9zZGVzIjpbeyJ0eXBlIjoiY3RtcmluZm8iLCJpbmZvIjp7ImNzdGF0dXMiOiJjYW5jZWxsZWQiLCJjdHlwZSI6IkFCQzE0OTgiLCJjb21wYW55QnJhbmNoIjoiQSIsImN1c3RvbWVySWQiOiIxMzg3NjZBQyJ9fV0sInN1YiI6Iis5NzItMy01NTU1LTU1NiIsImlzcyI6Imh0dHBzOi8vaWRwLmxpdmVwZXJzb24ubmV0IiwiYWNyIjoibG9hMSIsImV4cCI6MTYzNDk3MTkzMCwiaWF0IjoxNTcyNTIxMjYxfQ.JoJj4XJKdCzgnP79ow9TOY8vxCJSiMxyoWlgQW8EmrMxjs_0tK3zhKO0Ob4Z-qy60hW_2UOrORC07ihLdgLaWuP4zUSmIYXZPP5McuBPyYGTFMfmh-a1AJfN5aqnGWyoJnffNrh-IsgW9eLiUgiTdy7vZRZaimBcxtGmA1Hn2MuKhy6GrUDFlwLhRr-dlVRk1K4N2oSU3hJKDPLYyyZKB07aS9xDR4kk6SpSj2c4xF71D848QbD2oKXPXWit8nwsd-MAdNwSIeRLBq3G1bG1XKT4lMO6TqXzkPb0but1nJaAUA-NGr9ZRguu-iFnFPalLoxpO6BnQsAYU55vtibAew";
     }
-    window.doLogIn = function () {
-      var visitorName = document.getElementById("visitorNameForUMSAuth").value;
-      var queryParams = getURLParams(window.location.search);
-      if (!visitorName) {
-        visitorName = queryParams.client_id
+
+    function authenticate() {
+
+      // We pass you the URL of our conversation window as a querystring value called 'redirect_uri' - read this value
+      var chatURL = getURLParam("redirect_uri");
+      var state = getURLParam("state");
+
+      if (chatURL) {
+        chatURL = unescape(chatURL);
+
+        // Call your service to get JWT
+        var JWT = getJWT();
+
+        if (JWT === "") {
+          // No valid JWT supplied - show message telling customer they are unauthenticated
+          document.getElementById("notAuth").style.display = "block";
+        }
+        else {
+          // Valid JWT supplied - redirect window to conversation window URL
+          // Add the JWT on the end of the URL in the "code" querystring parameter
+          // e.g. "https://www.chatwindow.com/chat.html?code=[JWT]"
+          if (state) {
+            chatURL += "?state=" + state + "&code=" + JWT;
+          } else {
+            chatURL += "&code=" + JWT;
+          }
+
+          chatURL = decodeURIComponent(chatURL);
+          window.location.href = chatURL;
+        }
       }
-      var state = '';
-      var accountId = '';
-      if (queryParams.state) {
-        state = '&state=' + queryParams.state;
-      }
-      if (_getAccountIdFromUnifiedConfig(queryParams)) {
-        var accountId = '&accountId=' + _getAccountIdFromUnifiedConfig(queryParams)
-      }
-      window.location.href = queryParams.redirect_uri + (queryParams.redirect_uri.includes('?') ? '&' : '?') + "code=" + visitorName + "&lpDebug=2" + state + accountId;
     }
   </script>
+
 </head>
 
-<body>
-  Visitor name for authentication: <input id="visitorNameForUMSAuth" type="text">
-  <button id="authButton" style="font-size: 15px;" onclick="doLogIn()">Login!</button>
+<body cz-shortcut-listen="true">
+  <div id="notAuth" style="display:none">
+    Sorry, you are no longer authenticated. Please log back into eBanking.
+  </div>
+  <script>
+    authenticate();
+  </script>
+
+
 </body>
 
 </html>
